@@ -1,0 +1,15 @@
+echo "Installing Node (downloading, installing)"
+
+echo "Downloading Node v14.15.1..."
+cd $TMPDIR
+curl -#OL https://nodejs.org/dist/v14.15.1/node-v14.15.1.tar.gz
+tar xf node-v14.15.1.tar.gz
+
+echo "Installing Node v14.15.1 (1/2)..."
+cd $TMPDIR/node-v14.15.1
+./configure --dest-cpu=arm64 --dest-os=mac
+
+echo "Installing Node v14.15.1 (2/2) (this takes about 10 minutes)..."
+BACKUP_PATH=$PATH PATH=/usr/bin:$PATH
+sudo make install -j8 V= DESTCPU="arm64" ARCH="arm64" VARIATION="" DISTYPE="release" RELEASE_URLBASE="https://nodejs.org/download/release/"
+PATH=BACKUP_PATH

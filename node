@@ -1,0 +1,20 @@
+echo "Installing Node (downloading, installing)"
+
+echo "Downloading Node v15.3.0 (1/4)..."
+cd $TMPDIR
+curl -#OL https://nodejs.org/dist/v15.3.0/node-v15.3.0.tar.gz
+tar xf node-v15.3.0.tar.gz
+
+echo "Installing Node v15.3.0 (2/4)..."
+cd $TMPDIR/node-v15.3.0
+./configure --dest-cpu=arm64 --dest-os=mac
+
+BACKUP_PATH=$PATH PATH=/usr/bin:$PATH
+sudo make install -j8 V= DESTCPU="arm64" ARCH="arm64" VARIATION="" DISTYPE="release" RELEASE_URLBASE="https://nodejs.org/download/release/"
+PATH=BACKUP_PATH
+
+echo "Permitting Node v15.3.0 (3/4)..."
+sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+
+echo "Updating NPM (4/4)..."
+npm install -g npm
